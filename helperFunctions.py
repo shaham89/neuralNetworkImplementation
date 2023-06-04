@@ -20,7 +20,7 @@ def sigmoid_func(z):
     return output_val
 
 def sigmoid_derivative(z):
-    return np.exp(-z) - 1 / ((1 + np.exp(-z)) ** 2)
+    return np.exp(-z) / ((1 + np.exp(-z)) ** 2)
 
 def log_loss_func(prediction, y):
     return np.log(prediction) * y + np.log(1 - prediction) * (1 - y)
