@@ -49,3 +49,4 @@ class NetworkNode:
 
     def __repr__(self):
         return f"NetworkNode(weights={self.m_weights}, bias={self.m_bias})"
+
