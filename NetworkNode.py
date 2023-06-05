@@ -8,7 +8,10 @@ class NetworkNode:
 
     """A node has a vector of inputs, weights plus a bias. And an activation function"""
 
-    def __init__(self, weights, bias, input_values, activation_func=helperFunctions.sigmoid_func):
+    def __init__(self, weights, bias, input_values,
+                 activation_func=helperFunctions.sigmoid_func,
+                 loss_func=helperFunctions.log_loss_func):
+
         self.m_weights = weights
         self.m_bias = bias
         self.m_input_values = input_values
@@ -16,6 +19,8 @@ class NetworkNode:
         DEFAULT_LEARNING_RATE = 0.5
         self.weights_learning_rates = np.array([DEFAULT_LEARNING_RATE] * len(weights))
         self.bias_learning_rates = np.array([DEFAULT_LEARNING_RATE])
+        self.m_loss_func = loss_func
+
 
     @classmethod
     def generic_init(cls, number_of_weights, input_values=np.array([1, 1, 1])):
@@ -35,18 +40,19 @@ class NetworkNode:
         # y = mx + b, the output which is later passed to the activation function
         output_value = self.calc_output()
 
-        return helperFunctions.sigmoid_derivative(output_value) * self.m_weights
+        return self.activation_func(output_value) * self.m_weights
 
     # only one derivative
     def get_bias_gradient(self):
         # y = mx + b, the output which is later passed to the activation function
         output_value = self.calc_output()
 
-        return helperFunctions.sigmoid_derivative(output_value)
+        return self.activation_func(output_value)
 
     def update_parameters(self, weights_gradient, bias_gradient):
         self.m_weights -= weights_gradient * self.weights_learning_rates
         self.m_bias -= bias_gradient * self.bias_learning_rates
+
 
     def __repr__(self):
         return f"NetworkNode(weights={self.m_weights}, bias={self.m_bias})"
