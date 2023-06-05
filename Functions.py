@@ -34,12 +34,21 @@ class Functions:
 
     @staticmethod
     def log_loss_func(prediction, y):
-        return np.log(prediction) * y + np.log(1 - prediction) * (1 - y)
+        prediction = min(prediction, 0.9999)
+        prediction = max(prediction, 0.0001)
+
+        return -np.log(prediction) * y - np.log(1 - prediction) * (1 - y)
 
     @staticmethod
     def log_loss_derivative(pred, y):
-        return y / pred + (1 - y) / (pred - 1)
+        pred = min(pred, 0.9999)
+        pred = max(pred, 0.0001)
+
+        return -y / pred - (1 - y) / (pred - 1)
 
     @classmethod
     def init_cross_entropy(cls):
         return cls(Functions.log_loss_func, Functions.log_loss_derivative)
+
+
+
