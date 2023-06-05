@@ -12,6 +12,7 @@ def sigmoid_func(z):
     MAX_VALUE = 1 - MIN_VALUE              # 0.999...9
     output_val = (1.0 / (1 + math.exp(-z)))  # actual sigmoid
 
+
     if output_val < MIN_VALUE:
         return MIN_VALUE
     elif output_val > MAX_VALUE:
