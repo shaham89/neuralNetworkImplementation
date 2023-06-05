@@ -3,6 +3,7 @@ import numpy as np
 import helperFunctions
 
 
+
 class NetworkNode:
 
     """A node has a vector of inputs, weights plus a bias. And an activation function"""
