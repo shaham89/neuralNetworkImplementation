@@ -35,8 +35,8 @@ class Functions:
 
     @staticmethod
     def log_loss_func(prediction, y):
-        prediction = min(prediction, 0.999)
-        prediction = max(prediction, 0.001)
+        # prediction = min(prediction, 0.999)
+        # prediction = max(prediction, 0.001)
 
         return -np.log(prediction) * y - np.log(1 - prediction) * (1 - y)
 
@@ -44,6 +44,7 @@ class Functions:
     def log_loss_derivative(predications, y):
         MIN_VALUE = np.ones(predications.shape[0], dtype=float) * 1 * math.pow(10, -4)  # 0.000...1
         MAX_VALUE = 1 - MIN_VALUE  # 0.999...9
+
 
 
         return -y / predications - (1 - y) / (predications - 1)
