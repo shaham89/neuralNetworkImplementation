@@ -6,13 +6,13 @@ from NetworkNode import NetworkNode
 
 #returns a numpy array of the data
 def get_dataset():
-    data = np.loadtxt("breast-cancer-wisconsin.data",delimiter=",", dtype=str)
+    data = np.loadtxt("breast-cancer-wisconsin.data", delimiter=",", dtype=str)
 
     data = np.delete(data, np.s_[0], 1)
-    data = data.reshape((data.shape[0], 2, data.shape[1] - 1))
+    y = data.T[-1]
+    data = np.delete(data, np.s_[0], -1)
     print(data.shape)
-    print(data)
-
+    print(y.shape)
 def main():
     weights = np.array([1, 0.5, -1])
     bias = 4
