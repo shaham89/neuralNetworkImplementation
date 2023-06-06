@@ -12,14 +12,15 @@ class Functions:
     def sigmoid_func(z):
         # MAX_VALUE = 709 #Crossing this value will cause a float overflow
 
-        MIN_VALUE = 1 * math.pow(10, -10)  # 0.000...1
-        MAX_VALUE = 1 - MIN_VALUE  # 0.999...9
-        output_val = (1.0 / (1 + math.exp(-z)))  # actual sigmoid
+        MIN_VALUE = np.ones(z.shape[0], dtype=float) * 1 * math.pow(10, -4)  # 0.000...1
+        MAX_VALUE =  1 - MIN_VALUE  # 0.999...9
 
-        if output_val < MIN_VALUE:
-            return MIN_VALUE
-        elif output_val > MAX_VALUE:
-            return MAX_VALUE
+        output_val = np.minimum(np.maximum(1.0 / (1 + np.exp(-z)), MIN_VALUE), MAX_VALUE)  # actual sigmoid
+
+        # if output_val < MIN_VALUE:
+        #     return MIN_VALUE
+        # elif output_val > MAX_VALUE:
+        #     return MAX_VALUE
 
         return output_val
 
@@ -34,17 +35,18 @@ class Functions:
 
     @staticmethod
     def log_loss_func(prediction, y):
-        prediction = min(prediction, 0.9999)
-        prediction = max(prediction, 0.0001)
+        prediction = min(prediction, 0.999)
+        prediction = max(prediction, 0.001)
 
         return -np.log(prediction) * y - np.log(1 - prediction) * (1 - y)
 
     @staticmethod
-    def log_loss_derivative(pred, y):
-        pred = min(pred, 0.9999)
-        pred = max(pred, 0.0001)
+    def log_loss_derivative(predications, y):
+        MIN_VALUE = np.ones(predications.shape[0], dtype=float) * 1 * math.pow(10, -4)  # 0.000...1
+        MAX_VALUE = 1 - MIN_VALUE  # 0.999...9
 
-        return -y / pred - (1 - y) / (pred - 1)
+
+        return -y / predications - (1 - y) / (predications - 1)
 
     @classmethod
     def init_cross_entropy(cls):
