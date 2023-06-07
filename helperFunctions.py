@@ -34,6 +34,7 @@ class Functions:
 
     MAX_PREDICTION_VALUE = 0.999
     MIN_PREDICATION_VALUE = 0.001
+
     @staticmethod
     def log_loss_func(prediction, y):
         prediction = min(prediction, Functions.MAX_PREDICTION_VALUE)

@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 
 import helperFunctions
@@ -16,7 +18,7 @@ class NetworkNode:
         self.m_bias = bias
         self.m_input_values = input_values
         self.activation_func = activation_func
-        DEFAULT_LEARNING_RATE = 0.0005
+        DEFAULT_LEARNING_RATE = 0.005
         self.weights_learning_rates = np.array([DEFAULT_LEARNING_RATE] * len(weights))
         self.bias_learning_rate = np.array([DEFAULT_LEARNING_RATE])
         self.m_loss_func = loss_func
@@ -38,10 +40,11 @@ class NetworkNode:
 
     @classmethod
     def dataset_init(cls, X):
-        return cls(np.random.rand(X.shape[1]), 0, X,
-                   Functions.init_sigmoid(), Functions.init_cross_entropy())
-        # return cls(np.concatenate((np.zeros(len(X[0]) - 3), np.random.rand(3))), 0, X,
+        # return cls(np.random.rand(X.shape[1]), 0, X,
         #            Functions.init_sigmoid(), Functions.init_cross_entropy())
+        #np.random.rand(1)
+        return cls(np.concatenate((np.zeros(len(X[0]) - 2), np.array([0.5, 2]))), 0, X,
+                   Functions.init_sigmoid(), Functions.init_cross_entropy())
         # self.m_weights =  np.ones(number_of_weights)
         # self.m_bias = 0
         # self.m_input_values = input_values
@@ -52,7 +55,15 @@ class NetworkNode:
         if X is None:
             X = self.m_input_values
 
-        return np.sum(self.m_weights * X, axis=1) + self.m_bias
+        MAX_VALUE = np.ones(X.shape[0], dtype=float) * 1 * 15  # 0.000...1
+        MIN_VALUE = -MAX_VALUE  # 0.999...9
+        # print(X)
+        # print(MIN_VALUE)
+        # print(MAX_VALUE)
+        # print(self.m_weights)
+        # print(np.sum(self.m_weights * X, axis=1))
+        return np.minimum(np.maximum(np.sum(self.m_weights * X, axis=1) + self.m_bias, MIN_VALUE), MAX_VALUE)
+
 
     def get_activation_value(self, X=None, dot_product=None):
         if X is None:
@@ -83,18 +94,20 @@ class NetworkNode:
         act_der = self.activation_func.der(dot)
         print("act_der: " + str(act_der))
         activation = self.get_activation_value(X)
-        #print('activation: ' + str(activation))
+        print('activation: ' + str(activation))
 
         loss_der = self.m_loss_func.der(activation, y) #* act_der * self.m_weights
         print('loss der: ' + str(loss_der))
 
-        print("X:" + str(X))
-        avg_loss_der = np.average(loss_der * act_der)
+        print("X.T:" + str(-X.T))
+        avg_loss_der = loss_der * act_der
         print("sum:" + str(avg_loss_der))
-        gradient = avg_loss_der * -self.m_weights
-        #print('gradient:' + str(gradient))
+        print('muli:' + str(avg_loss_der * -X.T))
+        gradient = np.mean(avg_loss_der * -X.T, axis=1)
+        print('gradient:' + str(gradient))
 
         return gradient
+
         # output_value = self.dot_product(X)
         # print("weights")
         # print(output_value.T)
@@ -108,24 +121,47 @@ class NetworkNode:
     # only one derivative
     def get_bias_gradient(self, X, y):
         # y = mx + b, the output which is later passed to the activation function
-        output_value = self.dot_product(X)
-        print("bias")
-        print(output_value)
-        activated_value = self.activation_func.der(output_value)
+        # output_value = self.dot_product(X)
+        # print("bias")
+        # print(output_value)
+        # activated_value = self.activation_func.der(output_value)
+        #
+        # return self.m_loss_func.der(output_value, y) * activated_value
 
-        return self.m_loss_func.der(output_value, y) * activated_value
+        dot = self.dot_product(X)
+        print("dot: " + str(dot))
+        # print("bias: " + str(self.m_bias))
+
+        # print((np.sum(self.m_weights * X, axis=1) + self.m_bias).shape)
+        # print((np.sum(self.m_weights * X, axis=1) + self.m_bias))
+
+        act_der = self.activation_func.der(dot)
+        print("act_der: " + str(act_der))
+        activation = self.get_activation_value(X)
+        print('activation: ' + str(activation))
+
+        loss_der = self.m_loss_func.der(activation, y)  # * act_der * self.m_weights
+        print('loss der: ' + str(loss_der))
+
+        print("X.T:" + str(-X.T))
+        avg_loss_der = loss_der * act_der
+        print("sum:" + str(avg_loss_der))
+        gradient = np.mean(avg_loss_der * 1)
+        print('gradient:' + str(gradient))
+
+        return gradient
 
 
     def update_parameters(self, X, y):
         self.m_input_values = X
-        weights_gradient, bias_gradient = self.get_weights_gradient(X, y), 0 #self.get_bias_gradient(X, y)
-        self.m_weights[0] -= weights_gradient[0] * self.weights_learning_rates[0]
-        print('der:' + str(weights_gradient[0] * self.weights_learning_rates[0]))
+        weights_gradient, bias_gradient = self.get_weights_gradient(X, y), self.get_bias_gradient(X, y)
+        self.m_weights[-2] += weights_gradient[-2] * self.weights_learning_rates[-2]
+        #print('der:' + str(weights_gradient[0] * self.weights_learning_rates[0]))
         #print('weight:' + str(self.m_weights[-1]))
         self.m_bias -= bias_gradient * self.bias_learning_rate
 
     def fit(self, X, y):
-        for i in range(10):
+        for i in range(500):
 
 
             if i < 10 or i % 10 == 0:
@@ -134,7 +170,7 @@ class NetworkNode:
                 print(self)
                 activated_value = self.get_activation_value(X)
                 # print(activated_value)
-                print('avg loss: ' + str(np.average(self.m_loss_func.func(activated_value, y))))
+                print('-----------------------\navg loss: ' + str(np.average(self.m_loss_func.func(activated_value, y))) + '\n----------------')
 
             self.update_parameters(X, y)
 
