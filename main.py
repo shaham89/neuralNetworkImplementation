@@ -42,7 +42,7 @@ def get_dataset_X_y():
     MALIGNANT_VALUE = 4
     BENIGN_VALUE = 2
 
-    malignant = data[data.T[-1] == MALIGNANT_VALUE][:3]
+    malignant = data[data.T[-1] == MALIGNANT_VALUE] # [:3]
     benign = data[data.T[-1] == BENIGN_VALUE]
     benign = benign[:malignant.shape[0]]
     print(malignant.shape)
@@ -51,11 +51,11 @@ def get_dataset_X_y():
 
     y = (data.T[-1] / 2) - 1
     data.T[-1] = np.copy(y, subok=True) # convert the 2,4 into 0,1 for the classification
-    #data = np.delete(data, np.s_[0], -1)  # remove the Y results
+    data = np.delete(data, np.s_[-1], 1)  # remove the Y results
+
     X = np.delete(data, np.s_[0], 1)  # remove the ID
 
     print(X.shape)
-    print(X)
     print(y.shape)
 
     return X, y
