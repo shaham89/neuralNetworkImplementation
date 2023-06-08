@@ -171,9 +171,24 @@ class NetworkNode:
                 activated_value = self.get_activation_value(X)
                 # print(activated_value)
                 print('-----------------------\navg loss: ' + str(np.average(self.m_loss_func.func(activated_value, y))) + '\n----------------')
+                print(self.get_accuracy(X, y, 0.5))
 
             self.update_parameters(X, y)
 
+
+
+    def get_accuracy(self, X, y, threshold):
+        true_answers = y
+
+        answers_list = self.get_activation_value(X)
+        #print('pred:' + str(answers_list))
+        answers_list = (threshold < answers_list) * 1.0
+        #print('answers: ' + str(answers_list))
+        #print('y: ' + str(true_answers))
+        true_predictions = true_answers == answers_list
+
+        #print(true_predictions)
+        print(np.count_nonzero(true_predictions) / true_predictions.shape[0])
 
     def __repr__(self):
 
