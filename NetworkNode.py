@@ -160,35 +160,39 @@ class NetworkNode:
         #print('weight:' + str(self.m_weights[-1]))
         self.m_bias -= bias_gradient * self.bias_learning_rate
 
-    def fit(self, X, y):
-        for i in range(40000):
+    def fit(self, X_train, y_train, X_test, y_test):
+        max_accuracy = 0
+        for i in range(1000):
 
 
-            if i < 3 or i % 10000 == 0:
+            if i < 3 or i % 100 == 0:
                 #print("pred:" + str(self.get_activation_value()))
                 #print(np.self.m_loss_func.func(self.get_activation_value(), y))
                 print(self)
-                activated_value = self.get_activation_value(X)
+                activated_value = self.get_activation_value(X_train)
                 # print(activated_value)
-                print('-----------------------\navg loss: ' + str(np.average(self.m_loss_func.func(activated_value, y))) + '\n----------------')
-                print(self.get_accuracy(X, y, 0.5))
+                print('-----------------------\navg loss: ' + str(np.average(self.m_loss_func.func(activated_value, y_train))) + '\n----------------')
+                print(self.get_accuracy(X_train, y_train, 0.5))
+                print(self.get_accuracy(X_test, y_test))
+            acc = self.get_accuracy(X_test, y_test)
+            if max_accuracy < acc:
+                max_accuracy = acc
 
-            self.update_parameters(X, y)
+            self.update_parameters(X_train, y_train)
+        print('max:' + str(max_accuracy))
 
 
-
-    def get_accuracy(self, X, y, threshold):
+    def get_accuracy(self, X, y, threshold=0.5):
         true_answers = y
 
         answers_list = self.get_activation_value(X)
-        #print('pred:' + str(answers_list))
+
         answers_list = (threshold < answers_list) * 1.0
-        #print('answers: ' + str(answers_list))
-        #print('y: ' + str(true_answers))
+
         true_predictions = true_answers == answers_list
 
         #print(true_predictions)
-        print(np.count_nonzero(true_predictions) / true_predictions.shape[0])
+        return 100 * np.count_nonzero(true_predictions) / true_predictions.shape[0]
 
     def __repr__(self):
 

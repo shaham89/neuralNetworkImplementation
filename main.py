@@ -67,7 +67,15 @@ def main():
 
     node = NetworkNode.dataset_init(X)
     print(node)
+    X_train, y_train, X_test, y_test = helperFunctions.HelperFunctions.train_test_split(X, y, 0.25)
+    print(X_train.shape)
+    print(y_train.shape)
+    print(X_test.shape)
+    print(y_test.shape)
 
+    """NetworkNode(weights=[0.54201687 0.09545103 0.27370682 0.30382033 0.0181143  0.423715
+ 0.29786217 0.08282802 0.44836915], bias=[-8.657072])
+"""
     # node = NetworkNode.generic_init(1, 6)  # NetworkNode(weights, bias, inputs)
     #
     # print(node)
@@ -91,9 +99,10 @@ def main():
     #     print(node.m_loss_func.func(node.get_activation_value(), y))
     #     print(node)
 
-    node.fit(X, y)
+    node.fit(X_train, y_train, X_test, y_test)
     print(node)
-
+    print(node.get_accuracy(X_test, y_test))
+    print(node.get_accuracy(X_train, y_train))
 
 
 # Press the green button in the gutter to run the script.
