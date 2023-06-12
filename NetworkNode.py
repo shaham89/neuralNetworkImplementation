@@ -43,41 +43,26 @@ class NetworkNode:
         return cls(np.random.rand(number_of_weights), 0, input_values,
                    Functions.init_sigmoid(), Functions.init_cross_entropy())
 
-        """NetworkNode(weights=[0.50235337 0.64351151 1.53891935 0.78830567 1.70083465 0.43906473
- 1.86396637 0.66925708 0.18288869 0.93735947], bias=[0.])
- total loss: 2219.24635813194
-
-"""
-        # self.m_weights =  np.ones(number_of_weights)
-        # self.m_bias = 0
-        # self.m_input_values = input_values
-        # self.activation_func = helperFunctions.sigmoid_func
 
     @classmethod
     def dataset_init(cls, X):
         return cls(np.random.rand(X.shape[1]), 0, X,
                 Functions.init_sigmoid(), Functions.init_cross_entropy())
-        #np.random.rand(1)
-        #return cls(np.concatenate((np.zeros(len(X[0]) - 2), np.array([0.5, 2]))), 0, X,
-        #           Functions.init_sigmoid(), Functions.init_cross_entropy())
-        # self.m_weights =  np.ones(number_of_weights)
-        # self.m_bias = 0
-        # self.m_input_values = input_values
-        # self.activation_func = helperFunctions.sigmoid_func
 
-    #get the dot product plus the bias
+    """Get the dot product plus the bias. 
+    Example: bias = -3, weights= [1, 2, 5], X = [ [2, 1, 2], [8, 0, -5], [4, 4, 4] ]
+    X is always 2 dimensional with axis1.len == weights.len
+    """
     def dot_product(self, X=None):
         if X is None:
             X = self.m_input_values
 
-        MAX_VALUE = np.ones(X.shape[0], dtype=float) * 1 * 15  # 0.000...1
-        MIN_VALUE = -MAX_VALUE  # 0.999...9
-        # print(X)
-        # print(MIN_VALUE)
-        # print(MAX_VALUE)
-        # print(self.m_weights)
-        # print(np.sum(self.m_weights * X, axis=1))
-        return np.minimum(np.maximum(np.sum(self.m_weights * X, axis=1) + self.m_bias, MIN_VALUE), MAX_VALUE)
+        """The max value is set 15 so that """
+        MAX_VALUE = 15
+        max_array = np.ones(X.shape[0], dtype=float) * 1 * MAX_VALUE  # [MAX_VALUE, MAX_VALUE ... , MAX_VALUE]
+        min_array = -max_array  # [-MAX_VALUE, -MAX_VALUE ... , -MAX_VALUE]
+
+        return np.minimum(np.maximum(np.sum(self.m_weights * X, axis=1) + self.m_bias, min_array), max_array)
 
 
     def get_activation_value(self, X=None, dot_product=None):
@@ -90,14 +75,7 @@ class NetworkNode:
 
 
     def get_weights_gradient(self, X, y):
-        #print("testing")
-        # y = mx + b, the output which is later passed to the activation function
-        # print(X.shape)
-        # print(self.m_weights.shape)
-        # print((self.m_weights * X).shape)
-        # print("weights: " + str(self.m_weights))
-        # print("X:" + str(X))
-        # print("mul" + str(self.m_weights * X))
+
         dot = self.dot_product(X)
         #print("dot: "  + str(dot))
         #print("bias: " + str(self.m_bias))
@@ -116,22 +94,11 @@ class NetworkNode:
 
         #print("X.T:" + str(-X.T))
         avg_loss_der = loss_der * act_der
-        # print("sum:" + str(avg_loss_der))
-        # print('muli:' + str(avg_loss_der * -X.T))
+
         gradient = np.mean(avg_loss_der * X.T, axis=1)
-        #print('gradient:' + str(gradient))
 
         return gradient
 
-        # output_value = self.dot_product(X)
-        # print("weights")
-        # print(output_value.T)
-        #
-        #
-        # activated_value_der = self.activation_func.der(output_value)
-        #
-        # print(self.m_loss_func.der(output_value, y) * activated_value_der * self.m_weights)
-        # return np.sum(self.m_loss_func.der(output_value, y) * activated_value_der) * self.m_weights
 
     # only one derivative
     def get_bias_gradient(self, X, y):
@@ -196,7 +163,7 @@ class NetworkNode:
             self.update_parameters(X_train, y_train)
         print('max:' + str(max_accuracy))
 
-
+    @staticmethod
     def get_accuracy(self, X, y, threshold=0.5):
         true_answers = y
 
@@ -211,4 +178,4 @@ class NetworkNode:
 
     def __repr__(self):
 
-        return f"NetworkNode(weights={self.m_weights}, bias={self.m_bias})"
+        return f"NetworkNode({len(self.m_weights)} weights={self.m_weights}, bias={self.m_bias})"

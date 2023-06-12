@@ -8,7 +8,7 @@ class NeuralNetwork:
         self.X = X
         self.y = y
 
-        self.m_layers = np.array(len(layers), dtype=object)
+        self.m_layers = []
         number_of_weights_vector = layers[:-1]
         number_of_features = X.shape[1]
         number_of_weights_vector = np.concatenate((np.array([number_of_features]), number_of_weights_vector))
@@ -18,9 +18,16 @@ class NeuralNetwork:
 
         for i in range(len(layers)):
 
-            init_arr = number_of_weights_vector[i]
 
-            self.m_layers[i] = vNodes(init_arr)
+            init_arr = vNodes(np.ones(layers[i], dtype=int) * number_of_weights_vector[i])
+            print(init_arr)
+            self.m_layers.append(init_arr)
 
             print(self.m_layers)
+
+    def __repr__(self):
+        layers_string = ""
+        for layer in self.m_layers:
+            layers_string += str(len(layer)) + ', '
+        return f"NeuralNetwork({len(self.m_layers)} layers= [{layers_string}])"
 

@@ -101,6 +101,7 @@ def main():
     #     print(node.m_loss_func.func(node.get_activation_value(), y))
     #     print(node)
     nur = NeuralNetwork(X_train, y_train)
+    print(nur)
     return
     node.fit(X_train, y_train, X_test, y_test)
     print(node)
