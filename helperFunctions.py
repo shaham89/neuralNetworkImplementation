@@ -58,10 +58,7 @@ class HelperFunctions:
     @staticmethod
     def train_test_split(X, y, test_part=0.3):
         array_len = X.shape[0]
-        # rands = np.random.randint(0, array_len, array_len, )
-        #
-        # X = X[rands]
-        # y = y[rands]
+
         indices = np.random.permutation(array_len)
         X = X[indices]
         y = y[indices]

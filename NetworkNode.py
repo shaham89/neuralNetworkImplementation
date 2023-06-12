@@ -11,6 +11,20 @@ class NetworkNode:
     """A node has a vector of inputs, weights plus a bias. And an activation function"""
 
     def __init__(self, weights, bias, input_values,
+                         activation_func=Functions.init_sigmoid(),
+                         loss_func=Functions.init_cross_entropy()):
+
+        self.m_weights = weights
+        self.m_bias = bias
+        self.m_input_values = input_values
+        self.activation_func = activation_func
+        DEFAULT_LEARNING_RATE = 0.05
+        self.weights_learning_rates = np.array([DEFAULT_LEARNING_RATE] * len(weights))
+        self.bias_learning_rate = np.array([DEFAULT_LEARNING_RATE])
+        self.m_loss_func = loss_func
+
+    @classmethod
+    def init_with_values(self, weights, bias, input_values,
                  activation_func=Functions.init_sigmoid(),
                  loss_func=Functions.init_cross_entropy()):
 
@@ -26,8 +40,9 @@ class NetworkNode:
 
     @classmethod
     def generic_init(cls, number_of_weights, input_values=np.array([1, 1, 1])):
-        return cls(np.ones(number_of_weights), 0, input_values,
+        return cls(np.random.rand(number_of_weights), 0, input_values,
                    Functions.init_sigmoid(), Functions.init_cross_entropy())
+
         """NetworkNode(weights=[0.50235337 0.64351151 1.53891935 0.78830567 1.70083465 0.43906473
  1.86396637 0.66925708 0.18288869 0.93735947], bias=[0.])
  total loss: 2219.24635813194

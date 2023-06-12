@@ -3,6 +3,8 @@ import csv
 from Functions import Functions
 import helperFunctions
 from NetworkNode import NetworkNode
+from NeuralNetwork import NeuralNetwork
+
 
 def m_converter(x):
     if x.decode() == '?':
@@ -98,7 +100,8 @@ def main():
     #     print("pred:" + str(node.get_activation_value()))
     #     print(node.m_loss_func.func(node.get_activation_value(), y))
     #     print(node)
-
+    nur = NeuralNetwork(X_train, y_train)
+    return
     node.fit(X_train, y_train, X_test, y_test)
     print(node)
     print(node.get_accuracy(X_test, y_test))
