@@ -56,5 +56,17 @@ class Functions:
     def init_cross_entropy(cls):
         return cls(Functions.log_loss_func, Functions.log_loss_derivative)
 
+    @staticmethod
+    def empty_function(x):
+        return x
+
+    @staticmethod
+    def empty_function_der(x):
+        return 0
+
+    @classmethod
+    def init_empty_function(cls):
+        return cls(Functions.empty_function, Functions.empty_function_der)
+
 
 
