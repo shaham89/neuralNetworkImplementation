@@ -67,8 +67,8 @@ def main():
     X, y = get_dataset_X_y()
 
 
-    node = NetworkNode.dataset_init(X)
-    print(node)
+    #node = NetworkNode.dataset_init(X)
+    #print(node)
     X_train, y_train, X_test, y_test = helperFunctions.HelperFunctions.train_test_split(X, y, 0.25)
     print(X_train.shape)
     print(y_train.shape)
@@ -100,7 +100,7 @@ def main():
     #     print("pred:" + str(node.get_activation_value()))
     #     print(node.m_loss_func.func(node.get_activation_value(), y))
     #     print(node)
-    #nur = NeuralNetwork(X_train, y_train)
+    nur = NeuralNetwork(X_train, y_train)
     #print(nur)
 
 

@@ -1,4 +1,4 @@
-import numpy as np
+from Layer import Layer
 from NetworkNode import *
 
 class NeuralNetwork:
@@ -11,21 +11,29 @@ class NeuralNetwork:
         self.m_y = y
 
         self.m_layers = []
-        number_of_weights_vector = layers[:-1]
-        number_of_features = self.m_X.shape[1]
-        number_of_weights_vector = np.concatenate((np.array([number_of_features]), number_of_weights_vector))
 
-        vNodes = np.vectorize(NetworkNode.generic_init)
-        print(number_of_weights_vector)
-
-        for i in range(len(layers)):
-
-
-            init_arr = vNodes(np.ones(layers[i], dtype=int) * number_of_weights_vector[i], )
-            print(init_arr)
-            self.m_layers.append(init_arr)
-
-            print(self.m_layers)
+        self.m_layers.append(Layer.input_layer_init(self.m_X))
+        print(self.m_layers[0])
+        print(self.m_layers[0].get_nodes_value())
+        self.m_layers.append(Layer.hidden_layer_init(self.m_layers[0], 2))
+        print(self.m_layers[1])
+        print(self.m_layers[1].get_nodes_value())
+        # number_of_weights_vector = layers[:-1]
+        # number_of_features = self.m_X.shape[1]
+        # number_of_weights_vector = np.concatenate((np.array([number_of_features]), number_of_weights_vector))
+        #
+        #
+        # vNodes = np.vectorize(NetworkNode.generic_init)
+        # print(number_of_weights_vector)
+        #
+        # for i in range(len(layers)):
+        #
+        #
+        #     init_arr = vNodes(np.ones(layers[i], dtype=int) * number_of_weights_vector[i], )
+        #     print(init_arr)
+        #     self.m_layers.append(init_arr)
+        #
+        #     print(self.m_layers)
 
 
 

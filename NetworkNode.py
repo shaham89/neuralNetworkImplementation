@@ -31,7 +31,7 @@ class NetworkNode:
         self.bias_learning_rate = np.array([DEFAULT_LEARNING_RATE])
 
     @classmethod
-    def hidden_layer_node_init(cls, pre_layer):
+    def hidden_node_init(cls, pre_layer):
         return cls(weights=np.random.rand(pre_layer.get_length()),
                    bias=0,
                    pre_layer=pre_layer,
@@ -41,8 +41,10 @@ class NetworkNode:
                    loss_func=None)
 
     @classmethod
-    def input_layer_node_init(cls, x_col):
-        return cls(weights=np.ones(x_col),
+    def input_node_init(cls, x_col):
+        print('col: ' + str(x_col.shape))
+        #print(x_col.shape)
+        return cls(weights=np.ones(1),
                    bias=0,
                    x_col=x_col,
                    pre_layer=None,
@@ -51,7 +53,7 @@ class NetworkNode:
                    loss_func=None)
 
     @classmethod
-    def output_layer_node_init(cls, pre_layer, loss_function):
+    def output_node_init(cls, pre_layer, loss_function):
 
         return cls(weights=np.random.rand(pre_layer.get_length()),
                    bias=0,
@@ -86,6 +88,9 @@ class NetworkNode:
         return np.minimum(np.maximum(np.sum(self.m_weights * pre_layer_x, axis=1) + self.m_bias, min_array), max_array)
 
     def get_activation_value(self, pre_layer_x=None, dot_product=None):
+        if self.m_type == TypeEnum.Types.INPUT_LAYER_TYPE:
+            return self.m_x_col
+
         if pre_layer_x is None:
             pre_layer_x = self.m_pre_layer.get_nodes_value()
 
@@ -94,6 +99,7 @@ class NetworkNode:
         return self.activation_func.func(dot_product)
 
     def get_value(self):
+        print(self)
         return self.m_values
 
     def get_weights_gradient(self, X, y):
