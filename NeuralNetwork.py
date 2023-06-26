@@ -14,10 +14,14 @@ class NeuralNetwork:
 
         self.m_layers.append(Layer.input_layer_init(self.m_X))
         print(self.m_layers[0])
-        print(self.m_layers[0].get_nodes_value())
+        #print(self.m_layers[0].get_nodes_value())\
+
         self.m_layers.append(Layer.hidden_layer_init(self.m_layers[0], 2))
         print(self.m_layers[1])
-        print(self.m_layers[1].get_nodes_value())
+
+        self.m_layers.append(Layer.output_layer_init(self.m_layers[1], 1, Functions.init_cross_entropy()))
+        print(self.m_layers[2].get_nodes_value())
+        #print(self.m_layers[1].get_nodes_value())
         # number_of_weights_vector = layers[:-1]
         # number_of_features = self.m_X.shape[1]
         # number_of_weights_vector = np.concatenate((np.array([number_of_features]), number_of_weights_vector))
@@ -35,25 +39,42 @@ class NeuralNetwork:
         #
         #     print(self.m_layers)
 
+    def update_values(self, layer):
+        pass
+
 
 
     def fit(self, X_train, y_train, X_test, y_test):
-        self.m_layers.reverse()
-        for i in range(1000):
-            loss_der = self.m_loss_func.der(X_train,y_train)
+        for i in range(5):
 
-            for node in self.m_layers[0]:
-                node.gradient_step()
+            print('predications :' + str(self.m_layers[0].get_nodes_value()))
 
             for layer in self.m_layers:
-                pass
-                #if i < 3 or i % 100 == 0:
+                layer.update_values()
+
+            self.m_layers.reverse()
+            print('predications :' + str(self.m_layers[0].get_nodes_value()))
+            first_grad = self.m_loss_func.der(self.m_layers[0].get_nodes_value(), y_train)
+            print('grad: ' + str(first_grad))
+            # for layer in self.m_layers[:-1]:
+            #     weights_grad = layer.get_weights_gradient()
+            #     layer.u
+            self.m_layers[0].update_weights(first_grad)
+            self.m_layers.reverse()
+            # loss_der = self.m_loss_func.der(X_train, y_train)
+            #
+            # for node in self.m_layers[0]:
+            #     node.gradient_step()\
+            #
+            # for layer in self.m_layers:
+            #     pass
+            #     #if i < 3 or i % 100 == 0:
 
 
 
     def __repr__(self):
         layers_string = ""
         for layer in self.m_layers:
-            layers_string += str(len(layer)) + ', '
+            layers_string += str(layer.get_length()) + ', '
         return f"NeuralNetwork({len(self.m_layers)} layers= [{layers_string}])"
 

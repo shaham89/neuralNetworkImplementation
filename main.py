@@ -60,7 +60,7 @@ def get_dataset_X_y():
     print(X.shape)
     print(y.shape)
 
-    return X, y
+    return X[:5], y[:5]
 
 def main():
 
@@ -100,15 +100,13 @@ def main():
     #     print("pred:" + str(node.get_activation_value()))
     #     print(node.m_loss_func.func(node.get_activation_value(), y))
     #     print(node)
-    nur = NeuralNetwork(X_train, y_train)
-    #print(nur)
+    m_NN = NeuralNetwork(X_train, y_train)
+    print(m_NN)
 
-
-    return
-    node.fit(X_train, y_train, X_test, y_test)
-    print(node)
-    print(node.get_accuracy(X_test, y_test))
-    print(node.get_accuracy(X_train, y_train))
+    m_NN.fit(X_train, y_train, X_test, y_test)
+    print(m_NN)
+    #print(node.get_accuracy(X_test, y_test))
+    #print(node.get_accuracy(X_train, y_train))
 
 
 # Press the green button in the gutter to run the script.

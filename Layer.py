@@ -22,8 +22,7 @@ class Layer:
 
     @classmethod
     def input_layer_init(cls, X):
-        print(X.T[:])
-        print(X.T[:].shape)
+
         # print(ac)
         # print(ac[0].get_activation_value())
         # print(NetworkNode.input_node_init(X.T))
@@ -38,7 +37,11 @@ class Layer:
 
     @classmethod
     def output_layer_init(cls, pre_layer, number_of_nodes, loss_function):
-        return cls(nodes=np.vectorize(NetworkNode.output_node_init)(np.full(number_of_nodes, pre_layer.get_length(), dtype=int)),
+        nodes = np.ndarray(number_of_nodes, dtype=object)
+        for i in range(nodes.shape[0]):
+            nodes[i] = NetworkNode.output_node_init(pre_layer, loss_function)
+
+        return cls(nodes=nodes,
                    pre_layer=pre_layer,
                    loss_function=loss_function,
                    X=None,
@@ -49,10 +52,8 @@ class Layer:
     def hidden_layer_init(cls, pre_layer, number_of_nodes):
 
         nodes = np.ndarray(number_of_nodes, dtype=object)
-        print(nodes)
         for i in range(nodes.shape[0]):
             nodes[i] = NetworkNode.hidden_node_init(pre_layer)
-        print(nodes)
         return cls(
             nodes=nodes,
             pre_layer=pre_layer,
@@ -72,6 +73,12 @@ class Layer:
 
     def update_values(self):
         return np.vectorize(NetworkNode.update_value)(self.m_nodes)
+
+    def update_weights(self, weights_grad):
+        np.vectorize(NetworkNode.update_weights)(self.m_nodes, weights_grad)
+
+    def get_weights_gradient(self, weights_grad):
+        return np.column_stack([node.get_weights_gradient() for node in self.m_nodes])
 
     def get_length(self):
         return self.number_of_nodes

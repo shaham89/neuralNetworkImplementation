@@ -42,7 +42,6 @@ class NetworkNode:
 
     @classmethod
     def input_node_init(cls, x_col):
-        print('col: ' + str(x_col.shape))
         #print(x_col.shape)
         return cls(weights=np.ones(1),
                    bias=0,
@@ -99,11 +98,11 @@ class NetworkNode:
         return self.activation_func.func(dot_product)
 
     def get_value(self):
-        print(self)
         return self.m_values
 
-    def get_weights_gradient(self, X, y):
 
+    def get_weights_gradient(self):
+        X = self.m_pre_layer.get_nodes_value()
         dot = self.dot_product(X)
         # print("dot: "  + str(dot))
         # print("bias: " + str(self.m_bias))
@@ -160,13 +159,14 @@ class NetworkNode:
 
         return gradient
 
-    def update_parameters(self, X, y):
-        self.m_input_values = X
-        weights_gradient, bias_gradient = self.get_weights_gradient(X, y), self.get_bias_gradient(X, y)
-        self.m_weights -= weights_gradient * self.weights_learning_rates
+    def update_weights(self, weights_grad):
+        #weights_gradient, bias_gradient = self.get_weights_gradient(X, y), self.get_bias_gradient(X, y)
+        self.m_weights -= self.m_pre_layer.get_nodes_value() * weights_grad * self.weights_learning_rates
         # print('der:' + str(weights_gradient[0] * self.weights_learning_rates[0]))
         # print('weight:' + str(self.m_weights[-1]))
-        self.m_bias -= bias_gradient * self.bias_learning_rate
+
+    def update_bias(self, bias_der):
+        self.m_bias -= bias_der * self.bias_learning_rate
 
     def gradient_step(self, X, y, weights_gradient, bias_der, upper_layer_der):
         self.m_weights -= upper_layer_der * weights_gradient * self.weights_learning_rates
