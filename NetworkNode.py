@@ -121,9 +121,13 @@ class NetworkNode:
         # print("X.T:" + str(-X.T))
         # avg_loss_der = loss_der * act_der
         avg_loss_der = act_der
-        gradient = np.mean(avg_loss_der * X.T, axis=1)
+        grad = avg_loss_der * X.T
+        print("ggg:" + str(grad))
 
-        return gradient
+        #gradient = np.mean(grad, axis=1)
+        #print("mean ggg:" + str(gradient))
+
+        return grad
 
     # only one derivative
     def get_bias_gradient(self, X, y):
@@ -161,7 +165,24 @@ class NetworkNode:
 
     def update_weights(self, weights_grad):
         #weights_gradient, bias_gradient = self.get_weights_gradient(X, y), self.get_bias_gradient(X, y)
-        self.m_weights -= self.m_pre_layer.get_nodes_value() * weights_grad * self.weights_learning_rates
+        print(self.m_pre_layer.get_nodes_value())
+        print(self.m_pre_layer.get_nodes_value().shape)
+        print(self.weights_learning_rates)
+        #weights_grad *= self.weights_learning_rates
+        print(weights_grad.shape)
+        print(weights_grad.T)
+        mat = self.m_pre_layer.get_nodes_value() * weights_grad.T
+        print('mat')
+        print(mat)
+        print(mat.shape)
+        print(self.m_weights)
+        print(self.weights_learning_rates)
+        m = mat * self.weights_learning_rates
+        print(m)
+        m = np.mean(mat, axis=0)
+        print('avg ' + str(m))
+        self.m_weights -= m
+        print(self.m_weights)
         # print('der:' + str(weights_gradient[0] * self.weights_learning_rates[0]))
         # print('weight:' + str(self.m_weights[-1]))
 

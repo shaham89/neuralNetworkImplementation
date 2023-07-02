@@ -49,7 +49,6 @@ class Functions:
         # MAX_VALUE = 1 - MIN_VALUE  # 0.999...9
         #
 
-
         return -y / predications + (1 - y) / (1 - predications)
 
     @classmethod

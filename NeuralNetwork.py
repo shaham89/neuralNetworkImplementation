@@ -1,3 +1,5 @@
+import numpy as np
+
 from Layer import Layer
 from NetworkNode import *
 
@@ -42,25 +44,54 @@ class NeuralNetwork:
     def update_values(self, layer):
         pass
 
+    def get_activation_value(self):
+        return self.m_layers[-1].get_nodes_value()
 
+    def get_accuracy(self, y, threshold=0.5):
+        true_answers = y
+
+        answers_list = self.get_activation_value()
+        print('actual:' + str(answers_list))
+        answers_list = (threshold < answers_list) * 1.0
+
+        true_predictions = y == answers_list
+
+        # print(true_predictions)
+        return 100 * np.count_nonzero(true_predictions) / true_predictions.shape[0]
 
     def fit(self, X_train, y_train, X_test, y_test):
-        for i in range(5):
 
-            print('predications :' + str(self.m_layers[0].get_nodes_value()))
+
+        for i in range(10):
+
+            print('fit predications :' + str(self.m_layers[0].get_nodes_value()))
 
             for layer in self.m_layers:
                 layer.update_values()
 
             self.m_layers.reverse()
             print('predications :' + str(self.m_layers[0].get_nodes_value()))
+            print(self.m_layers[0])
+            print(y_train)
             first_grad = self.m_loss_func.der(self.m_layers[0].get_nodes_value(), y_train)
+
             print('grad: ' + str(first_grad))
             # for layer in self.m_layers[:-1]:
             #     weights_grad = layer.get_weights_gradient()
             #     layer.u
+            gradient = self.m_layers[0].get_weights_gradient()
+            print(gradient.shape)
+            print(first_grad.shape)
+            first_grad = np.matmul(gradient, first_grad)
+            print('weights grad' + str(first_grad))
+
             self.m_layers[0].update_weights(first_grad)
+
+
             self.m_layers.reverse()
+
+            print(self.get_accuracy(y_train))
+
             # loss_der = self.m_loss_func.der(X_train, y_train)
             #
             # for node in self.m_layers[0]:

@@ -75,9 +75,11 @@ class Layer:
         return np.vectorize(NetworkNode.update_value)(self.m_nodes)
 
     def update_weights(self, weights_grad):
-        np.vectorize(NetworkNode.update_weights)(self.m_nodes, weights_grad)
+        for node in self.m_nodes:
+            node.update_weights(weights_grad)
+        # np.vectorize()(self.m_nodes, weights_grad)
 
-    def get_weights_gradient(self, weights_grad):
+    def get_weights_gradient(self):
         return np.column_stack([node.get_weights_gradient() for node in self.m_nodes])
 
     def get_length(self):

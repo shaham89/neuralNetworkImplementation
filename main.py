@@ -56,11 +56,11 @@ def get_dataset_X_y():
     data = np.delete(data, np.s_[-1], 1)  # remove the Y results
 
     X = np.delete(data, np.s_[0], 1)  # remove the ID
-
+    y = np.expand_dims(y, axis=1)   # y = [[1], [0]..., [1]]
     print(X.shape)
     print(y.shape)
 
-    return X[:5], y[:5]
+    return X, y
 
 def main():
 
@@ -70,7 +70,7 @@ def main():
     #node = NetworkNode.dataset_init(X)
     #print(node)
     X_train, y_train, X_test, y_test = helperFunctions.HelperFunctions.train_test_split(X, y, 0.25)
-    print(X_train.shape)
+    print('shapes' + str(X_train.shape))
     print(y_train.shape)
     print(X_test.shape)
     print(y_test.shape)
