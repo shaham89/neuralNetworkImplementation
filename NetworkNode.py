@@ -103,8 +103,9 @@ class NetworkNode:
 
     def get_weights_gradient(self):
         X = self.m_pre_layer.get_nodes_value()
+        print('X:' + str(X))
         dot = self.dot_product(X)
-        # print("dot: "  + str(dot))
+        print("dot: " + str(dot))
         # print("bias: " + str(self.m_bias))
 
         # print((np.sum(self.m_weights * X, axis=1) + self.m_bias).shape)
@@ -183,6 +184,7 @@ class NetworkNode:
         print('avg ' + str(m))
         self.m_weights -= m
         print(self.m_weights)
+        return mat
         # print('der:' + str(weights_gradient[0] * self.weights_learning_rates[0]))
         # print('weight:' + str(self.m_weights[-1]))
 

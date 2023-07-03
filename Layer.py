@@ -83,6 +83,7 @@ class Layer:
         print('weights weird grad:')
         for node in self.m_nodes:
             print(node.get_weights_gradient())
+            print('hey')
         return np.column_stack([node.get_weights_gradient() for node in self.m_nodes])
 
     def get_length(self):

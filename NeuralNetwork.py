@@ -80,13 +80,16 @@ class NeuralNetwork:
             #     weights_grad = layer.get_weights_gradient()
             #     layer.u
             gradient = self.m_layers[0].get_weights_gradient()
+            print('sup:' + str(gradient))
             print(gradient.shape)
             print(first_grad.shape)
             first_grad = np.matmul(gradient, first_grad)
             print('weights grad' + str(first_grad))
 
-            self.m_layers[0].update_weights(first_grad)
-
+            tst = self.m_layers[0].update_weights(first_grad)
+            print('testt')
+            print(tst.shape)
+            print(tst)
             second_gradient = self.m_layers[1].get_weights_gradient()
             print(self.m_layers[1])
             print('sec:' + str(second_gradient.shape))
