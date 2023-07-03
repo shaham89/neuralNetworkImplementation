@@ -51,7 +51,7 @@ class NeuralNetwork:
         true_answers = y
 
         answers_list = self.get_activation_value()
-        print('actual:' + str(answers_list))
+        #print('actual:' + str(answers_list))
         answers_list = (threshold < answers_list) * 1.0
 
         true_predictions = y == answers_list
@@ -87,10 +87,16 @@ class NeuralNetwork:
 
             self.m_layers[0].update_weights(first_grad)
 
+            second_gradient = self.m_layers[1].get_weights_gradient()
+            print(self.m_layers[1])
+            print('sec:' + str(second_gradient.shape))
+            print('first grad' + str(first_grad.shape))
+
+            self.m_layers[1].update_weights(first_grad * second_gradient)
 
             self.m_layers.reverse()
 
-            print(self.get_accuracy(y_train))
+            print('accuracy: ' + str(self.get_accuracy(y_train)))
 
             # loss_der = self.m_loss_func.der(X_train, y_train)
             #

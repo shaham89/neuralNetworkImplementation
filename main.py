@@ -60,7 +60,7 @@ def get_dataset_X_y():
     print(X.shape)
     print(y.shape)
 
-    return X, y
+    return X[:5], y[:5]
 
 def main():
 

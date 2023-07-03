@@ -80,6 +80,9 @@ class Layer:
         # np.vectorize()(self.m_nodes, weights_grad)
 
     def get_weights_gradient(self):
+        print('weights weird grad:')
+        for node in self.m_nodes:
+            print(node.get_weights_gradient())
         return np.column_stack([node.get_weights_gradient() for node in self.m_nodes])
 
     def get_length(self):
