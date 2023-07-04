@@ -62,7 +62,12 @@ class NetworkNode:
         # print(MAX_VALUE)
         # print(self.m_weights)
         # print(np.sum(self.m_weights * X, axis=1))
-        return np.minimum(np.maximum(np.sum(self.m_weights * X, axis=1) + self.m_bias, MIN_VALUE), MAX_VALUE)
+        #print(np.sum(self.m_weights * X, axis=1))
+
+        #print(np.matmul(X, self.m_weights))
+
+        #return np.minimum(np.maximum(np.sum(self.m_weights * X, axis=1) + self.m_bias, MIN_VALUE), MAX_VALUE)
+        return np.minimum(np.maximum(np.matmul(X, self.m_weights) + self.m_bias, MIN_VALUE), MAX_VALUE)
 
 
     def get_activation_value(self, X=None, dot_product=None):
@@ -162,16 +167,17 @@ class NetworkNode:
 
     def fit(self, X_train, y_train, X_test, y_test):
         max_accuracy = 0
-        for i in range(1000):
+        NUMBER_OF_EPOCHS = 1000
+        for i in range(NUMBER_OF_EPOCHS):
 
 
             if i < 3 or i % 100 == 0:
                 #print("pred:" + str(self.get_activation_value()))
                 #print(np.self.m_loss_func.func(self.get_activation_value(), y))
                 print(self)
-                activated_value = self.get_activation_value(X_train)
+                training_activated_value = self.get_activation_value(X_train)
                 # print(activated_value)
-                print('-----------------------\navg loss: ' + str(np.average(self.m_loss_func.func(activated_value, y_train))) + '\n----------------')
+                print('-----------------------\navg loss: ' + str(np.average(self.m_loss_func.func(training_activated_value, y_train))) + '\n----------------')
                 print(self.get_accuracy(X_train, y_train, 0.5))
                 print(self.get_accuracy(X_test, y_test))
             acc = self.get_accuracy(X_test, y_test)
@@ -179,6 +185,8 @@ class NetworkNode:
                 max_accuracy = acc
 
             self.update_parameters(X_train, y_train)
+
+
         print('max:' + str(max_accuracy))
 
 
