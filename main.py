@@ -62,6 +62,8 @@ def get_dataset_X_y():
 
 def main():
 
+    np.random.seed(12)
+
     X, y = get_dataset_X_y()
 
 
@@ -101,8 +103,8 @@ def main():
 
     node.fit(X_train, y_train, X_test, y_test)
     print(node)
-    print(node.get_accuracy(X_test, y_test))
-    print(node.get_accuracy(X_train, y_train))
+    #print(node.get_accuracy(X_test, y_test))
+    #print(node.get_accuracy(X_train, y_train))
 
 
 # Press the green button in the gutter to run the script.
